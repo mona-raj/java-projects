@@ -1,11 +1,33 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
 
-        String word = "moon";
+        ArrayList<String> wordsList = new ArrayList<>();
+
+        String filePath = "src//words.txt";
+        String line;
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            while ((line = reader.readLine()) != null) {
+                wordsList.add(line);
+            }
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Error: Could not locate file");
+        }
+        catch (IOException e) {
+            System.out.println("Error: Could not read file");
+        }
+
+        String word = wordsList.get(random.nextInt(0, wordsList.size()));
 
         ArrayList<Character> list = new ArrayList<>();
         int wrongGuesses = 0;
@@ -17,7 +39,7 @@ public class Main {
         System.out.println("\n## HANGMAN GAME ##\n");
 
         while (wrongGuesses != 6) {
-            System.out.println("Word: " + list);
+            System.out.println("\nWord: " + list);
             System.out.print("Guess a letter: ");
             char guess = scanner.next().toLowerCase().charAt(0);
 
@@ -53,6 +75,9 @@ public class Main {
                 System.out.println("Wrong guesses: " + wrongGuesses);
             }
         }
+
+        // display original word
+        System.out.println("The original words was: " + word);
         scanner.close();
     }
 
